@@ -1,0 +1,64 @@
+FluTE version: 1.18
+Label: example-twodose
+Population: seattle
+Nodes used: Single processor version
+beta: 0.318959
+R0: 1.8
+Random number generator seed: 1
+Tracts: 124
+Communities: 283
+Families: 221813
+People: 563484
+Essential worker fraction: 0
+Travel allowed: 0
+School opening days: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+Seeded 10 infected people
+Seeded (n/10000) at airports: 0
+Seeded once
+Pre-existing immunity level: 1
+Pre-existing immunity fraction by age: 0,0,0,0,0,
+Baseline VES by age: 0,0,0,0,0,
+Prevaccination strategy: none
+Reactive vaccination strategy: mass
+Vaccine priorities : 1,1,1,1,1,1,1,1,1,1,1,1,1,
+Response threshhold: 1e-06
+Response delay: 30
+Ascertainment delay: 1
+Ascertainment fraction: 0.8
+Reactive strategies deployed on day: 0
+School closure policy: none
+School closure days: 0
+Isolation: 0
+Quarantine: 0
+Liberal leave: 0
+Antiviral policy: none
+Vaccination fraction: 0.7
+Vaccines initially available: 4294967295,
+Vaccines deliverable per day: 4294967295
+Antivirals available: 4294967295
+Antivirals deliverable per day: 4294967295
+Vaccines used: 394658,
+Antivirals used: 0
+VEs 0: 0.4
+VEi 0: 0.4
+VEp 0: 0.67
+vaccine 0 doses/person: 2
+vaccine 0 boost on day: 21
+vaccine 0 restrictions (infants, pre-school age children, school age children, young adults, older adults, elderly, pregnant): 0,0,0,0,0,0,0
+vaccine 0 efficacy buildup: 0 0 0.01 0.01 0.02 0.02 0.03 0.05 0.07 0.1 0.14 0.19 0.26 0.36 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.56 0.62 0.69 0.76 0.84 0.92 1
+Relative vaccine efficacy by age: 1,1,1,1,1,
+Needs boost by age and school: 0,0,0,0,0,0,0,0,
+AVEs: 0.3
+AVEp: 0.6
+AVEi: 0.62
+Cumulative vaccines used (daily) 0: 394658,394658,394658,394658,394658,394658,394658,394658,
+Number symptomatic (daily): 0,0,0,4,5,9,9,12,
+Cumulative symptomatic (daily): 0,0,0,4,5,9,14,18,
+Total symptomatic attack rates by age: 5.41653e-05,2.40206e-05,5.56754e-05,3.02371e-05,1.53266e-05,
+Total symptomatic attack rate: 3.19441e-05
+Total symptomatic individuals by age: 2,3,4,8,1,
+Total symptomatic unvaccinated individuals by age: 2,0,2,6,1,
+Total symptomatic vaccinated individuals by age (vaccine 0): 0,3,2,2,0,
+Total unvaccinated individuals by age: 11102,37226,21599,79277,19622,
+Total vaccinated individuals by age (vaccine 0): 25822,87667,50246,185299,45624,
+Total individuals by age: 36924,124893,71845,264576,65246,

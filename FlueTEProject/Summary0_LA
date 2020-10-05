@@ -1,0 +1,69 @@
+FluTE version: 1.18
+Label: example-la-laiv-tiv
+Population: la
+Nodes used: Single processor version
+beta: 0.318959
+R0: 1.8
+Random number generator seed: 1
+Tracts: 2049
+Communities: 5597
+Families: 4369645
+People: 11092230
+Essential worker fraction: 0
+Travel allowed: 1
+School opening days: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+Seeded 9 infected people
+Seeded (n/10000) at airports: 0
+Seeded daily
+Pre-existing immunity level: 1
+Pre-existing immunity fraction by age: 0,0,0,0,0,
+Baseline VES by age: 0,0,0,0,0,
+Prevaccination strategy: prevaccination
+Reactive vaccination strategy: none
+Vaccine priorities : 0,0,0,0,0,0,0,0,1,1,0,0,0,
+Response threshhold: 0
+Response delay: 1
+Ascertainment delay: 1
+Ascertainment fraction: 0.8
+Reactive strategies deployed on day: 0
+School closure policy: none
+School closure days: 0
+Isolation: 0
+Quarantine: 0
+Liberal leave: 0
+Antiviral policy: none
+Vaccination fraction: 0.5
+Vaccines initially available: 4294967295,4294967295,
+Vaccines deliverable per day: 4294967295
+Antivirals available: 4294967295
+Antivirals deliverable per day: 4294967295
+Vaccines used: 1592190,0,
+Antivirals used: 0
+VEs 0: 0.4
+VEi 0: 0.4
+VEp 0: 0.67
+vaccine 0 doses/person: 1
+vaccine 0 restrictions (infants, pre-school age children, school age children, young adults, older adults, elderly, pregnant): 0,0,0,0,0,0,0
+vaccine 0 efficacy buildup: 0 0.001 0.005 0.015 0.033 0.061 0.1 0.152 0.218 0.301 0.401 0.519 0.658 0.818 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+VEs 1: 0.4
+VEi 1: 0.4
+VEp 1: 0.67
+vaccine 1 doses/person: 1
+vaccine 1 restrictions (infants, pre-school age children, school age children, young adults, older adults, elderly, pregnant): 1,0,0,0,0,0,0
+vaccine 1 efficacy buildup: 0 0.001 0.005 0.015 0.033 0.061 0.1 0.152 0.218 0.301 0.401 0.519 0.658 0.818 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+Relative vaccine efficacy by age: 1,1,1,1,1,
+Needs boost by age and school: 0,0,0,0,0,0,0,0,
+AVEs: 0.3
+AVEp: 0.6
+AVEi: 0.62
+Cumulative vaccines used (daily) 0: 1592190,1592190,1592190,1592190,1592190,1592190,1592190,1592190,
+Number symptomatic (daily): 0,0,2,8,11,24,27,30,
+Cumulative symptomatic (daily): 0,0,2,8,11,24,31,42,
+Total symptomatic attack rates by age: 1.37548e-06,1.62707e-06,8.51329e-06,3.64365e-06,4.67764e-06,
+Total symptomatic attack rate: 3.78643e-06
+Total symptomatic individuals by age: 1,4,12,19,6,
+Total symptomatic unvaccinated individuals by age: 0,2,12,19,6,
+Total symptomatic vaccinated individuals by age (vaccine 0): 1,2,0,0,0,
+Total unvaccinated individuals by age: 363466,1229770,1409561,5214545,1282698,
+Total vaccinated individuals by age (vaccine 0): 363554,1228636,0,0,0,
+Total individuals by age: 727020,2458406,1409561,5214545,1282698,

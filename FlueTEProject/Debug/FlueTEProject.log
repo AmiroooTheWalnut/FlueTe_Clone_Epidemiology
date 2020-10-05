@@ -1,0 +1,3 @@
+﻿  flute.cpp
+LINK : fatal error LNK1104: cannot open file 'C:\Program Files (x86)\OpenMPI_v1.5.5-win32\lib.obj'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(861,5): error MSB6006: "link.exe" exited with code 1104.
