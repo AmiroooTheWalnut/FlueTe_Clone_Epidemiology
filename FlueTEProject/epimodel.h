@@ -436,6 +436,10 @@ class EpiModel {
   virtual void outputIndividuals(void);
   bool isEligible(const Person &p, int nVacNum);
 
+  int getCommunityIndexFromID(unsigned int input);
+  int getTractIndexFromID(unsigned int input);
+  Tract* getTractFromID(unsigned int input);
+
 #ifdef PARALLEL
   void sync(void);
 #endif

@@ -20,6 +20,12 @@ extern "C" {
 #include <malloc.h> 
 #include<algorithm> 
 
+#include <direct.h>
+#include <iostream>
+#include <stdio.h>
+
+#define GetCurrentDir _getcwd
+
 using namespace std;
 
 const int nVersionMajor = 1;
@@ -31,6 +37,12 @@ const int nVersionMinor = 18;
 // vaccine efficacy over time when individuals need a boost for a one-dose vaccine
 const double defaultvacceff[VACCEFFLENGTH+1] = {0,0.001,0.004,0.011,0.023,0.043,0.07,0.106,0.153,0.211,0.28,0.363,0.46,0.572,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.702,0.71,0.73,0.766,0.82,0.897,1};
 const int defaultboostday = 21;
+
+
+
+FILE* mySummaryFile;
+
+
 
 #ifdef PARALLEL
 EpiModel::EpiModel(int rank, int size, EpiModelParameters &params) : rank(rank), size(size) {
@@ -1590,6 +1602,14 @@ void EpiModel::dayinfectsusceptibles(const Person &infected, Community &comm) {
  * daytime transmission
  */
 void EpiModel::day(void) {
+	
+
+	int sumTravels = 0;
+	int sumInfectedTravels = 0;
+	//seeddisp = rand();
+	//bTravel = true;
+
+
   // calculate daytime susceptibility and infectiousness for each person
   vector< Community >::iterator cend = commvec.end();
   vector< Person >::iterator pend=pvec.end();
@@ -1622,10 +1642,21 @@ void EpiModel::day(void) {
     assert(p.prs<=1.0);
   }
 
+
+  int* communityTravels = (int*)calloc(commvec.size() * commvec.size(), sizeof(int));
+  int* communityTravelInfected = (int*)calloc(commvec.size() * commvec.size(), sizeof(int));
+
+  int* tractTravels = (int*)calloc(tractvec.size() * tractvec.size(), sizeof(int));
+  int* tractTravelInfected = (int*)calloc(tractvec.size() * tractvec.size(), sizeof(int));
+
+  int sourceCommunityIndex = 0;
+
+
   for (vector< Community >::iterator it = commvec.begin(); 
        it != cend;
        it++) {
     Community &comm = *it;
+	
 #ifdef PARALLEL
     vector< Person >::iterator iend=comm.immigrantworkers.end();
     for (vector< Person >::iterator pit = comm.immigrantworkers.begin(); 
@@ -1660,7 +1691,25 @@ void EpiModel::day(void) {
     for (list< Person >::iterator pit = comm.visitors.begin(); 
 	 pit != vend;
 	 pit++) {
+		
       Person &p = *pit;
+
+
+	  int destinationCommunity=getCommunityIndexFromID(p.nHomeComm);
+	  if (destinationCommunity == -1)
+	  {
+		  cout << "COMMUNITY NOT FOUND" << endl;
+	  }
+	  int random_number = rand() % 3 + 0;
+	  *(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunity) += random_number;
+	  sumTravels = sumTravels + random_number;
+	  if (isInfected(p))
+	  {
+		  *(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunity) += 1;
+		  sumInfectedTravels = sumInfectedTravels + 1;
+	  }
+
+
       p.prs = 1.0-p.fBaselineVES; // susceptibility multiplier
       if (isInfectious(p))
 	p.pri = vload[p.nWhichVload][(int)(p.iday)]; // infectiousness multiplier
@@ -1684,7 +1733,17 @@ void EpiModel::day(void) {
       assert(p.pri<=1.0);
       assert(p.prs<=1.0);
     }
+
+
+	sourceCommunityIndex = sourceCommunityIndex + 1;
+
+
   }
+
+
+  int numCommunities = sourceCommunityIndex - 1;
+  sourceCommunityIndex = 0;
+
 
   for (vector< Community >::iterator it = commvec.begin(); 
        it != cend;
@@ -1712,6 +1771,23 @@ void EpiModel::day(void) {
 	 it != wend;
 	 it++) {
       Person &p = pvec[*it];
+
+
+	  int destinationCommunity = getCommunityIndexFromID(p.nHomeComm);
+	  if (destinationCommunity == -1)
+	  {
+		  cout<< "COMMUNITY NOT FOUND" <<endl;
+	  }
+	  int random_number = rand() % 3 + 0;
+	  *(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunity) += random_number;
+	  sumTravels = sumTravels + random_number;
+	  if (isInfected(p))
+	  {
+		  *(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunity) += 1;
+		  sumInfectedTravels = sumInfectedTravels + 1;
+	  }
+
+
       if (isInfectious(p) && !isWithdrawn(p) && !isQuarantined(p) && p.nTravelTimer<=0)
 	dayinfectsusceptibles(p, comm);
     }
@@ -1736,12 +1812,373 @@ void EpiModel::day(void) {
 	   it != vend;
 	   it++) {
 	Person &p = *it;
+
+
+	int destinationCommunity = getCommunityIndexFromID(p.nHomeComm);
+	if (destinationCommunity == -1)
+	{
+		cout << "COMMUNITY NOT FOUND" << endl;
+	}
+	int random_number = rand() % 3 + 0;
+	*(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunity) += random_number;
+	sumTravels = sumTravels + random_number;
+	if (isInfected(p))
+	{
+		*(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunity) += 1;
+		sumInfectedTravels = sumInfectedTravels + 1;
+	}
+
+
 	assert(p.nDayComm==comm.id);
 	if (isInfectious(p))
 	  dayinfectsusceptibles(p, comm);
       }
     }
+
+
+	sourceCommunityIndex = sourceCommunityIndex + 1;
+
+
   }
+
+
+  sourceCommunityIndex = 0;
+  int destinationCommunityIndex = 0;
+
+  char buff[FILENAME_MAX];
+  GetCurrentDir(buff, FILENAME_MAX);
+  std::string current_working_dir(buff);
+
+  //cout << "Current directorty: " << current_working_dir << endl;
+
+  FILE* communityTravelFile;
+
+  std::stringstream cfString;
+  cfString << "cummunityFlow" << nTimer + 1 << ".csv";
+  std::string cfResult;
+  cfResult = cfString.str();
+
+  char* cfcstr = new char[cfResult.length() + 1];
+  strcpy_s(cfcstr, cfResult.length() + 1, cfResult.c_str());
+
+  fopen_s(&communityTravelFile, cfcstr, "w+");
+  fprintf(communityTravelFile, ",");
+  for (int i = 0; i < numCommunities;i++) {
+	  if (i != numCommunities - 1)
+	  {
+		  fprintf(communityTravelFile, "C%d,", sourceCommunityIndex);
+		  //cout << "C" << sourceCommunityIndex << ",";
+	  }
+	  else {
+		  fprintf(communityTravelFile, "C%d\n", sourceCommunityIndex);
+		  //cout << "C" << sourceCommunityIndex << "\n";
+	  }
+	  sourceCommunityIndex = sourceCommunityIndex + 1;
+  }
+
+  sourceCommunityIndex = 0;
+
+  for (vector< Community >::iterator it = commvec.begin();
+	  it != cend;
+	  it++) {
+	  Community& sComm = *it;
+	  destinationCommunityIndex = 0;
+	  fprintf(communityTravelFile, "C%d,", sourceCommunityIndex);
+	  //cout << "C" << sourceCommunityIndex << ",";
+	  for (vector< Community >::iterator itC = commvec.begin();
+		  itC != cend;
+		  itC++) {
+		  Community& dComm = *itC;
+		  if (destinationCommunityIndex != numCommunities ) {
+			  fprintf(communityTravelFile, "%u,", *(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunityIndex));
+			  //cout << *(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunityIndex) << ",";
+		  }
+		  else {
+			  fprintf(communityTravelFile, "%u\n", *(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunityIndex));
+			  //cout << *(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunityIndex) << "\n";
+		  }
+		  
+		  //cout << "Source tract: " << sComm.nTractID << " Destination tract: " << dComm.nTractID << " People flow: " << *(arr + sourceCommunityIndex * commvec.size() + destinationCommunityIndex) << endl;
+		  destinationCommunityIndex = destinationCommunityIndex + 1;
+	  }
+	  sourceCommunityIndex = sourceCommunityIndex + 1;
+  }
+  fclose(communityTravelFile);
+
+  sourceCommunityIndex = 0;
+
+  FILE* communityTravelInfectedFile;
+
+  std::stringstream cifString;
+  cifString << "cummunityInfectedFlow" << nTimer + 1 << ".csv";
+  std::string cifResult;
+  cifResult = cifString.str();
+
+  char* cifcstr = new char[cifResult.length() + 1];
+  strcpy_s(cifcstr, cifResult.length() + 1, cifResult.c_str());
+
+  fopen_s(&communityTravelInfectedFile, cifcstr, "w+");
+  fprintf(communityTravelInfectedFile, ",");
+  for (int i = 0; i < numCommunities; i++) {
+	  if (i != numCommunities - 1)
+	  {
+		  fprintf(communityTravelInfectedFile, "C%d,", sourceCommunityIndex);
+		  //cout << "C" << sourceCommunityIndex << ",";
+	  }
+	  else {
+		  fprintf(communityTravelInfectedFile, "C%d\n", sourceCommunityIndex);
+		  //cout << "C" << sourceCommunityIndex << "\n";
+	  }
+	  sourceCommunityIndex = sourceCommunityIndex + 1;
+  }
+
+  sourceCommunityIndex = 0;
+
+  for (vector< Community >::iterator it = commvec.begin();
+	  it != cend;
+	  it++) {
+	  Community& sComm = *it;
+	  destinationCommunityIndex = 0;
+	  fprintf(communityTravelInfectedFile, "C%d,", sourceCommunityIndex);
+	  //cout << "C" << sourceCommunityIndex << ",";
+	  for (vector< Community >::iterator itC = commvec.begin();
+		  itC != cend;
+		  itC++) {
+		  Community& dComm = *itC;
+		  if (destinationCommunityIndex != numCommunities) {
+			  fprintf(communityTravelInfectedFile, "%u,", *(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunityIndex));
+			  //cout << *(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunityIndex) << ",";
+		  }
+		  else {
+			  fprintf(communityTravelInfectedFile, "%u\n", *(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunityIndex));
+			  //cout << *(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunityIndex) << "\n";
+		  }
+
+		  //cout << "Source tract: " << sComm.nTractID << " Destination tract: " << dComm.nTractID << " People flow: " << *(arr + sourceCommunityIndex * commvec.size() + destinationCommunityIndex) << endl;
+		  destinationCommunityIndex = destinationCommunityIndex + 1;
+	  }
+	  sourceCommunityIndex = sourceCommunityIndex + 1;
+  }
+  fclose(communityTravelInfectedFile);
+
+  int* communityTravelBothSides = (int*)calloc(commvec.size(), sizeof(int));
+  for (int i = 0; i < numCommunities; i++) {
+	  for (int j = 0; j < numCommunities; j++) {
+		  *(communityTravelBothSides + i ) += *(communityTravels + i * commvec.size() + j);
+	  }
+  }
+
+  int* communityTravelInfectedBothSides = (int*)calloc(commvec.size(), sizeof(int));
+  for (int i = 0; i < numCommunities; i++) {
+	  for (int j = 0; j < numCommunities; j++) {
+		  *(communityTravelInfectedBothSides + i) += *(communityTravelInfected + i * commvec.size() + j);
+	  }
+  }
+
+  //for (int i = 0; i < numCommunities; i++) {
+	//  cout << "Community I/O: " << *(communityTravelBothSides + i) << endl;
+  //}
+
+  int* tractTravelBothSides = (int*)calloc(tractvec.size(), sizeof(int));
+  for (int i = 0; i < numCommunities; i++) {
+	  int index=getTractIndexFromID(getTractFromID(commvec.at(i).nTractID)->id);
+	  *(tractTravelBothSides + index) += *(communityTravelBothSides + i);
+  }
+
+  FILE* tractTravelFile;
+
+  std::stringstream trString;
+  trString << "TractFlow" << nTimer + 1 << ".csv";
+  std::string trfResult;
+  trfResult = trString.str();
+
+  char* trcstr = new char[trfResult.length() + 1];
+  strcpy_s(trcstr, trfResult.length() + 1, trfResult.c_str());
+
+  fopen_s(&tractTravelFile, trcstr, "w+");
+  fprintf(tractTravelFile, "Tract,Flow,Lat,Lon\n");
+  for (int i = 0; i < tractvec.size(); i++) {
+	  fprintf(tractTravelFile, "T%d,", i);
+	  fprintf(tractTravelFile, "%d,", *(tractTravelBothSides + i));
+	  fprintf(tractTravelFile, "%f,", tractvec.at(i).lat);
+	  fprintf(tractTravelFile, "%f\n", tractvec.at(i).lon);
+  }
+  fclose(tractTravelFile);
+
+  //for (int i = 0; i < tractvec.size(); i++) {
+//	  cout << "Tract I/O: " << *(tractTravelBothSides + i) << endl;
+  //}
+  
+  //for (int i = 0; i < numCommunities; i++) {
+	//  cout << "CTF: " << *(communityTravelInfectedBothSides + i) << endl;
+  //}
+
+  int* tractTravelInfectedBothSides = (int*)calloc(tractvec.size(), sizeof(int));
+  for (int i = 0; i < numCommunities; i++) {
+	  int index = getTractIndexFromID(getTractFromID(commvec.at(i).nTractID)->id);
+	  *(tractTravelInfectedBothSides + index) += *(communityTravelInfectedBothSides + i);
+  }
+
+  FILE* tractTravelInfectedFile;
+
+  std::stringstream trIString;
+  trIString << "TractFlowInfected" << nTimer + 1 << ".csv";
+  std::string trIfResult;
+  trIfResult = trIString.str();
+
+  char* trIcstr = new char[trIfResult.length() + 1];
+  strcpy_s(trIcstr, trIfResult.length() + 1, trIfResult.c_str());
+
+  fopen_s(&tractTravelInfectedFile, trIcstr, "w+");
+  fprintf(tractTravelInfectedFile, "Tract,Flow,Lat,Lon\n");
+  for (int i = 0; i < tractvec.size(); i++) {
+	  fprintf(tractTravelInfectedFile, "T%d,", i);
+	  fprintf(tractTravelInfectedFile, "%d,", *(tractTravelInfectedBothSides + i));
+	  fprintf(tractTravelInfectedFile, "%f,", tractvec.at(i).lat);
+	  fprintf(tractTravelInfectedFile, "%f\n", tractvec.at(i).lon);
+  }
+  fclose(tractTravelInfectedFile);
+
+  
+
+  free(communityTravels);
+  free(communityTravelInfected);
+  free(tractTravelBothSides);
+  free(communityTravelInfectedBothSides);
+
+  int numRecovered = 0;
+  int numRecoveredCalc = 0;
+  int sus = 0;
+  int inf = 0;
+  int symp = 0;
+
+  int* tractNumRecoveredCalc = (int*)calloc(tractvec.size() , sizeof(int));
+  int* tractPop = (int*)calloc(tractvec.size(), sizeof(int));
+  int* tractSus = (int*)calloc(tractvec.size(), sizeof(int));
+  int* tractInf = (int*)calloc(tractvec.size(), sizeof(int));
+  int* tractSymp = (int*)calloc(tractvec.size(), sizeof(int));
+
+  for (vector< Person >::iterator it = pvec.begin();
+	  it != pvec.end();
+	  it++) {
+	  Person& person = *it;
+	  int index=getTractIndexFromID(getTractFromID(commvec.at(getCommunityIndexFromID(person.nHomeComm)).nTractID)->id);
+	  
+	  *(tractPop + index) += 1;
+
+	  if ((person.status & (SUSCEPTIBLE | INFECTED | SYMPTOMATIC)) == ~(SUSCEPTIBLE | INFECTED | SYMPTOMATIC))
+	  {
+		  numRecovered = numRecovered + 1;
+	  }
+	  if ((person.status & SUSCEPTIBLE) == SUSCEPTIBLE)
+	  {
+		  sus = sus + 1;
+		  *(tractSus + index) += 1;
+	  }
+	  if ((person.status & INFECTED) == INFECTED)
+	  {
+		  inf = inf + 1;
+		  *(tractInf + index) += 1;
+	  }
+	  if ((person.status & SYMPTOMATIC) == SYMPTOMATIC)
+	  {
+		  symp = symp + 1;
+		  *(tractSymp + index) += 1;
+	  }
+  }
+
+  for (int it = 0; it < tractvec.size();it++) {
+	  *(tractNumRecoveredCalc + it) = *(tractPop + it) - *(tractSus + it) - *(tractInf + it) - *(tractSymp + it);
+  }
+
+  numRecoveredCalc = pvec.size() - sus - inf - symp;
+  cout << "Day: " << nTimer << " SumTravel: " << sumTravels << " SumInfectedTravel: " << sumInfectedTravels << endl;
+  cout << "NumRecovered: " << numRecovered << endl;
+  cout << "numRecoveredCalc: " << numRecoveredCalc << endl;
+  cout << "sus: " << sus << endl;
+  cout << "inf: " << inf << endl;
+  cout << "symp: " << symp << endl;
+
+  fprintf(mySummaryFile, "%d,%d,%d,%d,%d,%d,%d\n", nTimer, sus, inf, symp, sumInfectedTravels, sumTravels, numRecoveredCalc);
+
+  FILE* tractSummaryFile;
+
+  std::stringstream trSString;
+  trSString << "TractSummary" << nTimer + 1 << ".csv";
+  std::string trSfResult;
+  trSfResult = trSString.str();
+
+  char* trScstr = new char[trSfResult.length() + 1];
+  strcpy_s(trScstr, trSfResult.length() + 1, trSfResult.c_str());
+
+  fopen_s(&tractSummaryFile, trScstr, "w+");
+
+  fprintf(tractSummaryFile, "Tract,Sus,Inf,Symp,RecoveredCalc,Lat,Lon\n");
+
+  for (int i = 0; i < tractvec.size(); i++) {
+	  fprintf(tractSummaryFile, "T%d,", i);
+	  fprintf(tractSummaryFile, "%d,", *(tractSus + i));
+	  fprintf(tractSummaryFile, "%d,", *(tractInf + i));
+	  fprintf(tractSummaryFile, "%d,", *(tractSymp + i));
+	  fprintf(tractSummaryFile, "%d,", *(tractNumRecoveredCalc + i));
+	  fprintf(tractSummaryFile, "%f,", tractvec.at(i).lat);
+	  fprintf(tractSummaryFile, "%f\n", tractvec.at(i).lon);
+  }
+
+  fclose(tractSummaryFile);
+
+  free(tractNumRecoveredCalc);
+  free(tractPop);
+  free(tractSus);
+  free(tractInf);
+  free(tractSymp);
+}
+
+
+int EpiModel::getCommunityIndexFromID(unsigned int inputIndex) {
+	int outPutIndex = 0;
+	vector< Community >::iterator cend = commvec.end();
+	for (vector< Community >::iterator it = commvec.begin();
+		it != cend;
+		it++) {
+		Community& comm = *it;
+		if (comm.id == inputIndex)
+		{
+			return outPutIndex;
+		}
+		outPutIndex = outPutIndex + 1;
+	}
+	return - 1;
+}
+
+Tract* EpiModel::getTractFromID(unsigned int inputIndex) {
+	vector< Tract >::iterator cend = tractvec.end();
+	for (vector< Tract >::iterator it = tractvec.begin();
+		it != cend;
+		it++) {
+		Tract& comm = *it;
+		if (comm.id == inputIndex)
+		{
+			return &comm;
+		}
+	}
+	return NULL;
+}
+
+int EpiModel::getTractIndexFromID(unsigned int inputIndex) {
+	int outPutIndex = 0;
+	vector< Tract >::iterator cend = tractvec.end();
+	for (vector< Tract >::iterator it = tractvec.begin();
+		it != cend;
+		it++) {
+		Tract& comm = *it;
+		if (comm.id == inputIndex)
+		{
+			return outPutIndex;
+		}
+		outPutIndex = outPutIndex + 1;
+	}
+	return -1;
 }
 
 // nightinfectsusceptibles - called by "night" for nighttimetime transmission
@@ -3609,6 +4046,20 @@ void EpiModel::prerun(void) {
  *   nRunLength: total number of days requested
  */
 void EpiModel::run(void) {
+
+	std::stringstream trIString;
+	trIString << "MySummary" << ".csv";
+	std::string trIfResult;
+	trIfResult = trIString.str();
+
+	char* trIcstr = new char[trIfResult.length() + 1];
+	strcpy_s(trIcstr, trIfResult.length() + 1, trIfResult.c_str());
+
+	fopen_s(&mySummaryFile, trIcstr, "w+");
+	fprintf(mySummaryFile, ",Susceptible,Infected,Symptomatic,Infected travel,Sum travels,Recovered\n");
+
+
+
   prerun();
 #ifdef PARALLEL
   sync();
@@ -3667,4 +4118,8 @@ void EpiModel::run(void) {
     (*logfile).close();
   summary();
   outputIndividuals();
+
+
+
+  fclose(mySummaryFile);
 }
