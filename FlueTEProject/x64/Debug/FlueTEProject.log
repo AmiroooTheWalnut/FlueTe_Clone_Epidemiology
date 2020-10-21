@@ -1,2 +1,11 @@
-﻿  flute.cpp
-  FlueTEProject.vcxproj -> F:\My_software_develops\COVID\FlueTE\FlueTEProject\x64\Debug\FlueTEProject.exe
+﻿  epimodel.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\stdint.h(126,1): warning C4005: 'UINT64_C': macro redefinition
+F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\FlueTEProject\dSFMT.h(100): message : see previous definition of 'UINT64_C'
+F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\FlueTEProject\epimodel.cpp(345,62): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\FlueTEProject\epimodel.cpp(475,36): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\FlueTEProject\epimodel.cpp(543,35): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\FlueTEProject\epimodel.cpp(581,35): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\FlueTEProject\epimodel.cpp(2184,52): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\FlueTEProject\epimodel.cpp(2926,64): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\FlueTEProject\epimodel.cpp(3026,27): warning C4244: '*=': conversion from 'double' to 'unsigned int', possible loss of data
+  FlueTEProject.vcxproj -> F:\My_software_develops\COVID\FlueTE\FlueTe_Clone_Epidemiology\x64\Debug\FlueTEProject.exe

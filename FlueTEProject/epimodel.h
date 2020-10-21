@@ -277,6 +277,11 @@ struct Person {
   friend inline bool isInfant(const Person &p) { return p.nVaccineRestrictionBits&VINFANT; }
 
   friend inline unsigned char getVaccinePriority(Person &p) { return p.nVaccinePriority; }
+
+  //Community myCommunity;//Added by Amirooo!
+  unsigned int myCommunityIndex;//Added by Amirooo!
+  //Tract myTract;//Added by Amirooo!
+  unsigned int myTractIndex;//Added by Amirooo!
 };
 
 #ifdef PARALLEL
@@ -348,6 +353,8 @@ struct Community {
   double daycpcm[5];     // community-specific daytime community contact rates
   double daycpnh[5];     // community-specific daytime neighborhood contact rates
   double cps[10];         // community-specific school contact rates
+
+  unsigned int myTractIndex;//Added by Amirooo!
 };
 
 struct Tract {
@@ -436,9 +443,10 @@ class EpiModel {
   virtual void outputIndividuals(void);
   bool isEligible(const Person &p, int nVacNum);
 
-  int getCommunityIndexFromID(unsigned int input);
-  int getTractIndexFromID(unsigned int input);
-  Tract* getTractFromID(unsigned int input);
+  void assignTractOfPerson(Person &p);//Added by Amirooo!
+  void assignTractOfCommunity(Community &c);//Added by Amirooo!
+  int getCommunityIndexFromID(unsigned int input);//Added by Amirooo!
+  int getTractIndexFromID(unsigned int input);//Added by Amirooo!
 
 #ifdef PARALLEL
   void sync(void);

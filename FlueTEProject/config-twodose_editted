@@ -2,12 +2,12 @@
 label example-twodose
 datafile seattle
 logfile 7
-runlength 36
+runlength 360
 R0 1.8
 seed 1
 seedinfected 10
 seedinfecteddaily 0
 prestrategy none
 
-isolation 0.8
-quarantine 0.8
+isolation 0.5
+quarantine 0.5

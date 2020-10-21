@@ -1604,8 +1604,8 @@ void EpiModel::dayinfectsusceptibles(const Person &infected, Community &comm) {
 void EpiModel::day(void) {
 	
 
-	int sumTravels = 0;
-	int sumInfectedTravels = 0;
+	int sumTravels = 0;//Added by Amirooo!
+	int sumInfectedTravels = 0;//Added by Amirooo!
 	//seeddisp = rand();
 	//bTravel = true;
 
@@ -1643,13 +1643,13 @@ void EpiModel::day(void) {
   }
 
 
-  int* communityTravels = (int*)calloc(commvec.size() * commvec.size(), sizeof(int));
-  int* communityTravelInfected = (int*)calloc(commvec.size() * commvec.size(), sizeof(int));
+  int* communityTravels = (int*)calloc(commvec.size() * commvec.size(), sizeof(int));//Added by Amirooo!
+  int* communityTravelInfected = (int*)calloc(commvec.size() * commvec.size(), sizeof(int));//Added by Amirooo!
 
-  int* tractTravels = (int*)calloc(tractvec.size() * tractvec.size(), sizeof(int));
-  int* tractTravelInfected = (int*)calloc(tractvec.size() * tractvec.size(), sizeof(int));
+  int* tractTravels = (int*)calloc(tractvec.size() * tractvec.size(), sizeof(int));//Added by Amirooo!
+  int* tractTravelInfected = (int*)calloc(tractvec.size() * tractvec.size(), sizeof(int));//Added by Amirooo!
 
-  int sourceCommunityIndex = 0;
+  int sourceCommunityIndex = 0;//Added by Amirooo!
 
 
   for (vector< Community >::iterator it = commvec.begin(); 
@@ -1695,18 +1695,14 @@ void EpiModel::day(void) {
       Person &p = *pit;
 
 
-	  int destinationCommunity=getCommunityIndexFromID(p.nHomeComm);
-	  if (destinationCommunity == -1)
-	  {
-		  cout << "COMMUNITY NOT FOUND" << endl;
-	  }
-	  int random_number = rand() % 3 + 0;
-	  *(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunity) += random_number;
-	  sumTravels = sumTravels + random_number;
+
+	  int random_number = rand() % 3 + 0;//Added by Amirooo!
+	  *(communityTravels + sourceCommunityIndex * commvec.size() + p.myCommunityIndex) += random_number;//Added by Amirooo!
+	  sumTravels = sumTravels + random_number;//Added by Amirooo!
 	  if (isInfected(p))
 	  {
-		  *(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunity) += 1;
-		  sumInfectedTravels = sumInfectedTravels + 1;
+		  *(communityTravelInfected + sourceCommunityIndex * commvec.size() + p.myCommunityIndex) += 1;//Added by Amirooo!
+		  sumInfectedTravels = sumInfectedTravels + 1;//Added by Amirooo!
 	  }
 
 
@@ -1735,14 +1731,14 @@ void EpiModel::day(void) {
     }
 
 
-	sourceCommunityIndex = sourceCommunityIndex + 1;
+	sourceCommunityIndex = sourceCommunityIndex + 1;//Added by Amirooo!
 
 
   }
 
 
-  int numCommunities = sourceCommunityIndex - 1;
-  sourceCommunityIndex = 0;
+  int numCommunities = sourceCommunityIndex - 1;//Added by Amirooo!
+  sourceCommunityIndex = 0;//Added by Amirooo!
 
 
   for (vector< Community >::iterator it = commvec.begin(); 
@@ -1773,18 +1769,13 @@ void EpiModel::day(void) {
       Person &p = pvec[*it];
 
 
-	  int destinationCommunity = getCommunityIndexFromID(p.nHomeComm);
-	  if (destinationCommunity == -1)
+	  int random_number = rand() % 3 + 0;//Added by Amirooo!
+	  *(communityTravels + sourceCommunityIndex * commvec.size() + p.myCommunityIndex) += random_number;//Added by Amirooo!
+	  sumTravels = sumTravels + random_number;//Added by Amirooo!
+	  if (isInfected(p))//Added by Amirooo!
 	  {
-		  cout<< "COMMUNITY NOT FOUND" <<endl;
-	  }
-	  int random_number = rand() % 3 + 0;
-	  *(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunity) += random_number;
-	  sumTravels = sumTravels + random_number;
-	  if (isInfected(p))
-	  {
-		  *(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunity) += 1;
-		  sumInfectedTravels = sumInfectedTravels + 1;
+		  *(communityTravelInfected + sourceCommunityIndex * commvec.size() + p.myCommunityIndex) += 1;//Added by Amirooo!
+		  sumInfectedTravels = sumInfectedTravels + 1;//Added by Amirooo!
 	  }
 
 
@@ -1814,18 +1805,13 @@ void EpiModel::day(void) {
 	Person &p = *it;
 
 
-	int destinationCommunity = getCommunityIndexFromID(p.nHomeComm);
-	if (destinationCommunity == -1)
+	int random_number = rand() % 3 + 0;//Added by Amirooo!
+	*(communityTravels + sourceCommunityIndex * commvec.size() + p.myCommunityIndex) += random_number;//Added by Amirooo!
+	sumTravels = sumTravels + random_number;//Added by Amirooo!
+	if (isInfected(p))//Added by Amirooo!
 	{
-		cout << "COMMUNITY NOT FOUND" << endl;
-	}
-	int random_number = rand() % 3 + 0;
-	*(communityTravels + sourceCommunityIndex * commvec.size() + destinationCommunity) += random_number;
-	sumTravels = sumTravels + random_number;
-	if (isInfected(p))
-	{
-		*(communityTravelInfected + sourceCommunityIndex * commvec.size() + destinationCommunity) += 1;
-		sumInfectedTravels = sumInfectedTravels + 1;
+		*(communityTravelInfected + sourceCommunityIndex * commvec.size() + p.myCommunityIndex) += 1;//Added by Amirooo!
+		sumInfectedTravels = sumInfectedTravels + 1;//Added by Amirooo!
 	}
 
 
@@ -1836,25 +1822,27 @@ void EpiModel::day(void) {
     }
 
 
-	sourceCommunityIndex = sourceCommunityIndex + 1;
+	sourceCommunityIndex = sourceCommunityIndex + 1;//Added by Amirooo!
 
 
   }
 
 
-  sourceCommunityIndex = 0;
-  int destinationCommunityIndex = 0;
+  sourceCommunityIndex = 0;//Added by Amirooo!
+  int destinationCommunityIndex = 0;//Added by Amirooo!
 
-  char buff[FILENAME_MAX];
-  GetCurrentDir(buff, FILENAME_MAX);
-  std::string current_working_dir(buff);
+  char buff[FILENAME_MAX];//Added by Amirooo!
+  GetCurrentDir(buff, FILENAME_MAX);//Added by Amirooo!
+  std::string current_working_dir(buff);//Added by Amirooo!
 
-  //cout << "Current directorty: " << current_working_dir << endl;
+  //cout << "Current directorty: " << current_working_dir << endl;//Added by Amirooo!
 
+  //Saving the directed community to cummunity flow //Added by Amirooo!
+  /*
   FILE* communityTravelFile;
 
   std::stringstream cfString;
-  cfString << "cummunityFlow" << nTimer + 1 << ".csv";
+  cfString << "cummunityDirectedFlow" << nTimer + 1 << ".csv";
   std::string cfResult;
   cfResult = cfString.str();
 
@@ -1905,12 +1893,16 @@ void EpiModel::day(void) {
   }
   fclose(communityTravelFile);
 
+  */
+
+  //Saving the directed community to cummunity infected flow //Added by Amirooo!
+  /*
   sourceCommunityIndex = 0;
 
   FILE* communityTravelInfectedFile;
 
   std::stringstream cifString;
-  cifString << "cummunityInfectedFlow" << nTimer + 1 << ".csv";
+  cifString << "cummunityInfectedDirectedFlow" << nTimer + 1 << ".csv";
   std::string cifResult;
   cifResult = cifString.str();
 
@@ -1960,18 +1952,20 @@ void EpiModel::day(void) {
 	  sourceCommunityIndex = sourceCommunityIndex + 1;
   }
   fclose(communityTravelInfectedFile);
+  */
 
-  int* communityTravelBothSides = (int*)calloc(commvec.size(), sizeof(int));
-  for (int i = 0; i < numCommunities; i++) {
-	  for (int j = 0; j < numCommunities; j++) {
-		  *(communityTravelBothSides + i ) += *(communityTravels + i * commvec.size() + j);
+
+  int* communityTravelBothSides = (int*)calloc(commvec.size(), sizeof(int));//Added by Amirooo!
+  for (int i = 0; i < numCommunities; i++) {//Added by Amirooo!
+	  for (int j = 0; j < numCommunities; j++) {//Added by Amirooo!
+		  *(communityTravelBothSides + i ) += *(communityTravels + i * commvec.size() + j);//Added by Amirooo!
 	  }
   }
 
-  int* communityTravelInfectedBothSides = (int*)calloc(commvec.size(), sizeof(int));
-  for (int i = 0; i < numCommunities; i++) {
-	  for (int j = 0; j < numCommunities; j++) {
-		  *(communityTravelInfectedBothSides + i) += *(communityTravelInfected + i * commvec.size() + j);
+  int* communityTravelInfectedBothSides = (int*)calloc(commvec.size(), sizeof(int));//Added by Amirooo!
+  for (int i = 0; i < numCommunities; i++) {//Added by Amirooo!
+	  for (int j = 0; j < numCommunities; j++) {//Added by Amirooo!
+		  *(communityTravelInfectedBothSides + i) += *(communityTravelInfected + i * commvec.size() + j);//Added by Amirooo!
 	  }
   }
 
@@ -1981,14 +1975,14 @@ void EpiModel::day(void) {
 
   int* tractTravelBothSides = (int*)calloc(tractvec.size(), sizeof(int));
   for (int i = 0; i < numCommunities; i++) {
-	  int index=getTractIndexFromID(getTractFromID(commvec.at(i).nTractID)->id);
+	  int index = commvec.at(i).myTractIndex;
 	  *(tractTravelBothSides + index) += *(communityTravelBothSides + i);
   }
 
   FILE* tractTravelFile;
 
   std::stringstream trString;
-  trString << "TractFlow" << nTimer + 1 << ".csv";
+  trString << "TractFlowVertex" << nTimer + 1 << ".csv";
   std::string trfResult;
   trfResult = trString.str();
 
@@ -2015,14 +2009,14 @@ void EpiModel::day(void) {
 
   int* tractTravelInfectedBothSides = (int*)calloc(tractvec.size(), sizeof(int));
   for (int i = 0; i < numCommunities; i++) {
-	  int index = getTractIndexFromID(getTractFromID(commvec.at(i).nTractID)->id);
+	  int index = commvec.at(i).myTractIndex;
 	  *(tractTravelInfectedBothSides + index) += *(communityTravelInfectedBothSides + i);
   }
 
   FILE* tractTravelInfectedFile;
 
   std::stringstream trIString;
-  trIString << "TractFlowInfected" << nTimer + 1 << ".csv";
+  trIString << "TractFlowVertexInfected" << nTimer + 1 << ".csv";
   std::string trIfResult;
   trIfResult = trIString.str();
 
@@ -2039,11 +2033,107 @@ void EpiModel::day(void) {
   }
   fclose(tractTravelInfectedFile);
 
+  // \/\/\/\/ Write directed tract to tract flow
+  int* tractTravelDirected = (int*)calloc(tractvec.size() * tractvec.size(), sizeof(int));
+  for (int i = 0; i < numCommunities; i++) {
+	  int sourceTractIndex = commvec.at(i).myTractIndex;
+	  for (int j = 0; j < numCommunities; j++) {
+		  int destinaionTractIndex = commvec.at(j).myTractIndex;
+		  *(tractTravelDirected + sourceTractIndex * tractvec.size() + destinaionTractIndex) += *(communityTravels + i * commvec.size() + j);
+	  }
+  }
+
+  int* tractTravelInfectedDirected = (int*)calloc(tractvec.size() * tractvec.size(), sizeof(int));
+  for (int i = 0; i < numCommunities; i++) {
+	  int sourceTractIndex = commvec.at(i).myTractIndex;
+	  for (int j = 0; j < numCommunities; j++) {
+		  int destinaionTractIndex = commvec.at(j).myTractIndex;
+		  *(tractTravelInfectedDirected + sourceTractIndex * tractvec.size() + destinaionTractIndex) += *(communityTravelInfected + i * commvec.size() + j);
+	  }
+  }
+
+  FILE* tractTravelDirectedFile;
+
+  std::stringstream trDString;
+  trDString << "TractFlowDirected" << nTimer + 1 << ".csv";
+  std::string trDfResult;
+  trDfResult = trDString.str();
+
+  char* trDcstr = new char[trDfResult.length() + 1];
+  strcpy_s(trDcstr, trDfResult.length() + 1, trDfResult.c_str());
+
+  fopen_s(&tractTravelDirectedFile, trDcstr, "w+");
   
+  fprintf(tractTravelDirectedFile, ",");
+  for (int i = 0; i < tractvec.size(); i++) {
+	  if (i != tractvec.size()-1)
+	  {
+		  fprintf(tractTravelDirectedFile, "T%d,", i);
+		  //cout << "C" << sourceCommunityIndex << ",";
+	  }
+	  else {
+		  fprintf(tractTravelDirectedFile, "T%d\n", i);
+		  //cout << "C" << sourceCommunityIndex << "\n";
+	  }
+  }
+  for (int i = 0; i < tractvec.size(); i++) {
+	  fprintf(tractTravelDirectedFile, "T%d,", i);
+	  for (int j = 0; j < tractvec.size(); j++) {
+		  if (j != tractvec.size() - 1)
+		  {
+			  fprintf(tractTravelDirectedFile, "%d,", *(tractTravelDirected + i * tractvec.size() + j));
+		  }
+		  else {
+			  fprintf(tractTravelDirectedFile, "%d\n", *(tractTravelDirected + i * tractvec.size() + j));
+		  }
+	  }
+  }
+  fclose(tractTravelDirectedFile);
+
+  FILE* tractTravelInfectedDirectedFile;
+
+  std::stringstream trIDString;
+  trIDString << "TractFlowInfectedDirected" << nTimer + 1 << ".csv";
+  std::string trIDfResult;
+  trIDfResult = trIDString.str();
+
+  char* trIDcstr = new char[trIDfResult.length() + 1];
+  strcpy_s(trIDcstr, trIDfResult.length() + 1, trIDfResult.c_str());
+
+  fopen_s(&tractTravelInfectedDirectedFile, trIDcstr, "w+");
+
+  fprintf(tractTravelInfectedDirectedFile, ",");
+  for (int i = 0; i < tractvec.size(); i++) {
+	  if (i != tractvec.size() - 1)
+	  {
+		  fprintf(tractTravelInfectedDirectedFile, "T%d,", i);
+		  //cout << "C" << sourceCommunityIndex << ",";
+	  }
+	  else {
+		  fprintf(tractTravelInfectedDirectedFile, "T%d\n", i);
+		  //cout << "C" << sourceCommunityIndex << "\n";
+	  }
+  }
+  for (int i = 0; i < tractvec.size(); i++) {
+	  fprintf(tractTravelInfectedDirectedFile, "T%d,", i);
+	  for (int j = 0; j < tractvec.size(); j++) {
+		  if (j != tractvec.size() - 1)
+		  {
+			  fprintf(tractTravelInfectedDirectedFile, "%d,", *(tractTravelInfectedDirected + i * tractvec.size() + j));
+		  }
+		  else {
+			  fprintf(tractTravelInfectedDirectedFile, "%d\n", *(tractTravelInfectedDirected + i * tractvec.size() + j));
+		  }
+	  }
+  }
+  fclose(tractTravelInfectedDirectedFile);
+  // ^^^^ Write directed tract to tract flow
 
   free(communityTravels);
   free(communityTravelInfected);
   free(tractTravelBothSides);
+  free(tractTravelDirected);
+  free(tractTravelInfectedDirected);
   free(communityTravelInfectedBothSides);
 
   int numRecovered = 0;
@@ -2062,7 +2152,7 @@ void EpiModel::day(void) {
 	  it != pvec.end();
 	  it++) {
 	  Person& person = *it;
-	  int index=getTractIndexFromID(getTractFromID(commvec.at(getCommunityIndexFromID(person.nHomeComm)).nTractID)->id);
+	  int index = person.myTractIndex;
 	  
 	  *(tractPop + index) += 1;
 
@@ -2134,6 +2224,17 @@ void EpiModel::day(void) {
   free(tractSymp);
 }
 
+void EpiModel::assignTractOfPerson(Person& p) {
+	p.myCommunityIndex = getCommunityIndexFromID(p.nHomeComm);
+	//p.myCommunity = commvec.at(p.myCommunityIndex);
+	p.myTractIndex = getTractIndexFromID(commvec.at(p.myCommunityIndex).nTractID);
+	//p.myTract = tractvec.at(p.myTractIndex);
+}
+
+void EpiModel::assignTractOfCommunity(Community& c) {
+	c.myTractIndex = getTractIndexFromID(c.nTractID);
+}
+
 
 int EpiModel::getCommunityIndexFromID(unsigned int inputIndex) {
 	int outPutIndex = 0;
@@ -2151,19 +2252,6 @@ int EpiModel::getCommunityIndexFromID(unsigned int inputIndex) {
 	return - 1;
 }
 
-Tract* EpiModel::getTractFromID(unsigned int inputIndex) {
-	vector< Tract >::iterator cend = tractvec.end();
-	for (vector< Tract >::iterator it = tractvec.begin();
-		it != cend;
-		it++) {
-		Tract& comm = *it;
-		if (comm.id == inputIndex)
-		{
-			return &comm;
-		}
-	}
-	return NULL;
-}
 
 int EpiModel::getTractIndexFromID(unsigned int inputIndex) {
 	int outPutIndex = 0;
@@ -3933,6 +4021,17 @@ void EpiModel::seedinfected(void) {
  * Actions to take just before the model run
  */
 void EpiModel::prerun(void) {
+
+	for (int i = 0; i < pvec.size(); i++) {//Added by Amirooo!
+		assignTractOfPerson(pvec.at(i));//Added by Amirooo!
+	}
+
+	for (int i = 0; i < commvec.size(); i++) {//Added by Amirooo!
+		assignTractOfCommunity(commvec.at(i));//Added by Amirooo!
+	}
+	cout << "PREPROCESS IS DONE" << endl;//Added by Amirooo!
+
+
   // open schools as appropriate
   for (vector< Tract >::iterator it = tractvec.begin();
        it != tractvec.end();
@@ -3945,97 +4044,100 @@ void EpiModel::prerun(void) {
   }
 
   // pre-vaccination and priming
-  if (fVaccinationFraction>0.0 &&
-      (ePrevaccinationStrategy==PREVACCINATE ||
-       ePrevaccinationStrategy==PRIMEBOOSTRANDOM || 
-       ePrevaccinationStrategy==PRIMEBOOSTSAME)) {
-    // pre-vaccinate or pre-prime those who want it
-    vector< Person >::iterator pend=pvec.end();
-    for (vector< Person >::iterator it = pvec.begin(); 
-	 it != pend;
-	 it++) {
-      Person &p = *it;
-      if (p.nVaccinePriority>0 &&
-	  (ePrevaccinationStrategy!=PRIMEBOOSTRANDOM ||
-	   (ePrevaccinationStrategy==PRIMEBOOSTRANDOM && get_rand_double<fVaccinationFraction)))
-	p.bWantVac=true;
-    }
-    for (int vacnum=0; vacnum<nNumVaccineTypes; vacnum++)
-      if (VaccineData[vacnum].nNumDoses>0) {
-	unsigned int nDoses = (ePrevaccinationStrategy==PREVACCINATE?VaccineData[vacnum].nNumDoses:1); // for prevaccination, give all doses; For priming, just give 1.
-	int nDay = (ePrevaccinationStrategy==PREVACCINATE?VACCEFFLENGTH:VaccineData[vacnum].nBoostDay); // how many days ago to pre-vaccinate or pre-prime?
-	double vFrac = 0.0;
-	// demand count for THIS vaccine
-	unsigned int wantthisvac[PRIORITY_LAST];
-	memset(wantthisvac, 0, PRIORITY_LAST*sizeof(unsigned int));
-	for (vector< Person >::iterator it = pvec.begin(); 
-	     it != pend;
-	     it++) {
-	  Person &p = *it;
-	  if (p.bWantVac && p.bVaccineEligible[vacnum] && p.nVaccinePriority>0)
-	    wantthisvac[p.nVaccinePriority]++;
-	}
-#ifdef PARALLEL
-	for (int i=1; i<=nHighestPriority; i++) {
-	  unsigned int total=0;
-	  MPI_Allreduce(wantthisvac+i, &total, 1, MPI_UNSIGNED, MPI_SUM, MPI_COMM_WORLD);
-	  wantthisvac[i]=total;
-	}
-#endif
-	for (int priority=1; priority<=nHighestPriority; priority++) {
-	  if (wantthisvac[priority]>0) {
-	    vFrac = nVaccineSupply[vacnum]/(double)wantthisvac[priority];
-	    for (vector< Person >::iterator it = pvec.begin(); 
-		 it != pend;
-		 it++) {
-	      Person &p = *it;
-	      if (p.bWantVac && p.bVaccineEligible[vacnum] && p.nVaccinePriority>0) {
-		if (vFrac>=1.0 || get_rand_double < vFrac) {
-		  p.bWantVac = false;
-		  if (nVaccineSupply[vacnum]>=nDoses)
-		    nVaccineSupply[vacnum]-=nDoses;
-		  else
-		    nVaccineSupply[vacnum]=0;
-		  nNumVaccineDosesUsed[vacnum]+=nDoses;
-		  setWhichVaccine(p, vacnum);
-		  setVaccinated(p);
-		  if (needsBoost(p)) {
-		    if (VaccineData[vacnum].nNumDoses>1) {
-		      clearNeedsBoost(p);
-		    } else if (ePrevaccinationStrategy==PREVACCINATE && nVaccineSupply[vacnum]>0) {
-		      nVaccineSupply[vacnum]--;
-		      nNumVaccineDosesUsed[vacnum]++;
-		    }
-		  }
-		  if (ePrevaccinationStrategy==PREVACCINATE)
-		    setBoosted(p);
-		  p.vday = nDay;
-#ifdef PARALLEL
-		  if (p.nWorkRank!=rank)
-		    emigrantupdates.push_back(p.id);
-#endif
-		}
-	      }
-	    }
+  if (fVaccinationFraction > 0.0 &&
+	  (ePrevaccinationStrategy == PREVACCINATE ||
+		  ePrevaccinationStrategy == PRIMEBOOSTRANDOM ||
+		  ePrevaccinationStrategy == PRIMEBOOSTSAME)) {
+	  // pre-vaccinate or pre-prime those who want it
+	  vector< Person >::iterator pend = pvec.end();
+	  for (vector< Person >::iterator it = pvec.begin();
+		  it != pend;
+		  it++) {
+		  Person& p = *it;
+		  if (p.nVaccinePriority > 0 &&
+			  (ePrevaccinationStrategy != PRIMEBOOSTRANDOM ||
+				  (ePrevaccinationStrategy == PRIMEBOOSTRANDOM && get_rand_double < fVaccinationFraction)))
+			  p.bWantVac = true;
 	  }
-	}
-      }
+	  for (int vacnum = 0; vacnum < nNumVaccineTypes; vacnum++)
+		  if (VaccineData[vacnum].nNumDoses > 0) {
+			  unsigned int nDoses = (ePrevaccinationStrategy == PREVACCINATE ? VaccineData[vacnum].nNumDoses : 1); // for prevaccination, give all doses; For priming, just give 1.
+			  int nDay = (ePrevaccinationStrategy == PREVACCINATE ? VACCEFFLENGTH : VaccineData[vacnum].nBoostDay); // how many days ago to pre-vaccinate or pre-prime?
+			  double vFrac = 0.0;
+			  // demand count for THIS vaccine
+			  unsigned int wantthisvac[PRIORITY_LAST];
+			  memset(wantthisvac, 0, PRIORITY_LAST * sizeof(unsigned int));
+			  for (vector< Person >::iterator it = pvec.begin();
+				  it != pend;
+				  it++) {
+				  Person& p = *it;
+				  if (p.bWantVac && p.bVaccineEligible[vacnum] && p.nVaccinePriority > 0)
+					  wantthisvac[p.nVaccinePriority]++;
+			  }
+#ifdef PARALLEL
+			  for (int i = 1; i <= nHighestPriority; i++) {
+				  unsigned int total = 0;
+				  MPI_Allreduce(wantthisvac + i, &total, 1, MPI_UNSIGNED, MPI_SUM, MPI_COMM_WORLD);
+				  wantthisvac[i] = total;
+			  }
+#endif
+			  for (int priority = 1; priority <= nHighestPriority; priority++) {
+				  if (wantthisvac[priority] > 0) {
+					  vFrac = nVaccineSupply[vacnum] / (double)wantthisvac[priority];
+					  for (vector< Person >::iterator it = pvec.begin();
+						  it != pend;
+						  it++) {
+						  Person& p = *it;
+						  if (p.bWantVac && p.bVaccineEligible[vacnum] && p.nVaccinePriority > 0) {
+							  if (vFrac >= 1.0 || get_rand_double < vFrac) {
+								  p.bWantVac = false;
+								  if (nVaccineSupply[vacnum] >= nDoses)
+									  nVaccineSupply[vacnum] -= nDoses;
+								  else
+									  nVaccineSupply[vacnum] = 0;
+								  nNumVaccineDosesUsed[vacnum] += nDoses;
+								  setWhichVaccine(p, vacnum);
+								  setVaccinated(p);
+								  if (needsBoost(p)) {
+									  if (VaccineData[vacnum].nNumDoses > 1) {
+										  clearNeedsBoost(p);
+									  }
+									  else if (ePrevaccinationStrategy == PREVACCINATE && nVaccineSupply[vacnum] > 0) {
+										  nVaccineSupply[vacnum]--;
+										  nNumVaccineDosesUsed[vacnum]++;
+									  }
+								  }
+								  if (ePrevaccinationStrategy == PREVACCINATE)
+									  setBoosted(p);
+								  p.vday = nDay;
+#ifdef PARALLEL
+								  if (p.nWorkRank != rank)
+									  emigrantupdates.push_back(p.id);
+#endif
+							  }
+						  }
+					  }
+				  }
+			  }
+		  }
 
-    // clear bWantVac status of all people
-    for (vector< Person >::iterator it = pvec.begin(); 
-	 it != pvec.end();
-	 it++) {
-      Person &p = *it;
-      p.bWantVac = false;
-      if ((ePrevaccinationStrategy==PRIMEBOOSTSAME && !isVaccinated(p)) || // only vaccinated people will get a boost
-	  (ePrevaccinationStrategy==PRIMEBOOSTRANDOM && get_rand_double>=fVaccinationFraction)) // random people will get a dose
-	p.nVaccinePriority = 0;
-    }
+	  // clear bWantVac status of all people
+	  for (vector< Person >::iterator it = pvec.begin();
+		  it != pvec.end();
+		  it++) {
+		  Person& p = *it;
+		  p.bWantVac = false;
+		  if ((ePrevaccinationStrategy == PRIMEBOOSTSAME && !isVaccinated(p)) || // only vaccinated people will get a boost
+			  (ePrevaccinationStrategy == PRIMEBOOSTRANDOM && get_rand_double >= fVaccinationFraction)) // random people will get a dose
+			  p.nVaccinePriority = 0;
+	  }
+
 #ifdef PARALLEL
     for (int i=0; i<nNumVaccineTypes; i++)
       MPI_Allreduce(nNumVaccineDosesUsed+i, nNumVaccineDosesUsedTotal+i, 1, MPI_UNSIGNED, MPI_SUM, MPI_COMM_WORLD);
 #endif
   }
+
   if (!bSeedDaily)
     seedinfected();
 }
@@ -4121,5 +4223,5 @@ void EpiModel::run(void) {
 
 
 
-  fclose(mySummaryFile);
+  fclose(mySummaryFile);//Added by Amirooo!
 }
